@@ -1,0 +1,32 @@
+<br />
+<div onload="this.load()" class="container">
+    <table class="table table-hover" *ngIf="this.itemLists.length !== 0; else elseBlock">
+        <thead>
+            <tr>
+                <th scope="col">Sr.No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Mobile</th>
+                <th scope="col">Bill No.</th>
+                <th scope="col">Bill Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of itemLists" routerLinkActive="active">
+                <td style="LINE-HEIGHT:50px">&nbsp;&nbsp;{{item.Sr_No}}</td>
+                <td style="LINE-HEIGHT:50px">
+                    <a class="nav-link" routerLink="/viewBill/{{item.Sr_No}}">{{item.Name}}</a>
+                </td>
+                <td style="LINE-HEIGHT:50px">
+                    <a class="nav-link" routerLink="/viewBill/{{item.Sr_No}}">{{item.Mobile_no}}</a>
+                </td>
+                <td style="LINE-HEIGHT:50px">
+                    {{item.Bill_No}}
+                </td>
+                <td style="LINE-HEIGHT:50px">{{item.Bill_Date.slice(0,10)}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <ng-template #elseBlock>
+        <app-loader></app-loader>
+    </ng-template>
+</div>

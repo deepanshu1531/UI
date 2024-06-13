@@ -1,0 +1,134 @@
+<!-- {{itemLists.Name}} -->
+<br />
+<div id="bill" class="container customBorder1">
+    <div hidden="" class="popUp" id="popUp">
+        <app-loader></app-loader>
+    </div>
+    <div class="billHead">
+        <h1 class="shopName"><span (click)="printPdf()"><img style="width: 50px; height: 50px;"
+                    src="../../assets/1.png"></span>
+            {{ SHOP_NAME }}</h1>
+        <p class="shopAdd">{{ SHOP_ADD }}<br />Contact:
+            {{ SHOP_CONT_NO }}, Email: {{ SHOP_EMAIL }}</p>
+       <hr />
+        <div class="row">
+            <div class="col">
+                <p class="custDetail">Customer Name: {{itemLists.Name}}<br />Address: {{itemLists.Address}}<br />Mobile:
+                    {{itemLists.Mobile_no}}</p>
+            </div>
+            <div class="col">
+                <p class="custDetail">Date: {{itemLists.Bill_Date}}<br />Bill Number: {{itemLists.Bill_No}}<br />GST
+                    Number: {{ GST_NO }}</p>
+            </div>
+        </div>
+    </div><br />
+    <div class="billHead">
+        <table class="table table-hover">
+            <thead>
+                <tr class="shopAdd">
+                    <th scope="col">Item</th>
+                    <th *ngIf="this.edit" scope="col">Purity</th>
+                    <th scope="col">Weight (gm)</th>
+                    <th *ngIf="this.edit" scope="col">Day Rate</th>
+                    <th *ngIf="this.edit" scope="col">Making</th>
+                    <th scope="col">Amount (Rs)</th>
+                    <th *ngIf="this.edit" scope="col">Sold Back Amt</th>
+                    <th *ngIf="this.edit" scope="col">SoldBack</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="shopAdd" *ngFor="let item of itemLists.Item_Details; index as i">
+                    <td style="LINE-HEIGHT:50px">{{item.item}}</td>
+                    <td *ngIf="this.edit" style="LINE-HEIGHT:50px">{{item.purity}}K</td>
+                    <td style="LINE-HEIGHT:50px">{{item.weight}}</td>
+                    <td *ngIf="this.edit" style="LINE-HEIGHT:50px">{{item.dayRate}}</td>
+                    <td *ngIf="this.edit" style="LINE-HEIGHT:50px">{{item.making}}</td>
+                    <td style="LINE-HEIGHT:50px">{{item.Price}}</td>
+                    <td *ngIf="this.edit" style="LINE-HEIGHT:50px">{{item.soldBackAmt}}</td>
+                    <td *ngIf="this.edit" style="LINE-HEIGHT:50px">
+                        <!-- {{itemLists.Item_Details[0].soldBack}} -->
+
+                        <button class="btn btn-primary" *ngIf="itemLists.Item_Details[i].soldBack; else elseBlock">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                                class="bi bi-check-square" viewBox="0 0 16 16">
+                                <path
+                                    d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                <path
+                                    d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+                            </svg>
+                        </button>
+                        <ng-template #elseBlock>
+                            <button class="btn btn-secondary" (click)="soldBack(i)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor"
+                                    class="bi bi-x" viewBox="0 0 16 16">
+                                    <path
+                                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                </svg>
+                            </button>
+                        </ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div><br />
+    <div class="billHead">
+        <br />
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-md-4">
+                <p class="custDetail">Amt: {{Math.round(itemLists.Calc_Amt)}} Rs
+                    <br />
+                    <span *ngIf="itemLists.Exchange > 0">
+                        Exchange: {{Math.round(itemLists.Exchange)}} Rs
+                        <br />
+                    </span>
+                    <span *ngIf="itemLists.Calc_Amt != itemLists.Total_Amt">
+                        Total Discount: {{Math.round((itemLists.Calc_Amt - itemLists.Exchange) - itemLists.Total_Amt)}} Rs
+                        <br />
+                    </span>
+                    <b>Total Amt: {{Math.round(itemLists.Total_Amt)}} Rs </b>
+                    <br />
+                    <span *ngIf="itemLists.Total_Amt != itemLists.Paid || this.edit">
+                        Due: {{Math.round(itemLists.Total_Amt - itemLists.Paid)}} Rs
+                        <br />
+                        <b id="paidAmt">Amt Paid: <span [contentEditable]="edit">{{Math.round(itemLists.Paid)}}</span> Rs </b>
+                    </span>
+                </p>
+            </div>
+            <hr />
+            <p class="custDetail">Note: {{itemLists.Remark}}</p>
+            <hr />
+            <h6 style="text-align: center;">Thank You! Visit Again&nbsp;
+                <span>
+                    <span *ngIf="edit; else elseBlock">
+                        <span (click)="updateBtn()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-save-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M8.5 1.5A1.5 1.5 0 0 1 10 0h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h6c-.314.418-.5.937-.5 1.5v7.793L4.854 6.646a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0l3.5-3.5a.5.5 0 0 0-.708-.708L8.5 9.293z" />
+                            </svg>
+                        </span>
+                        &nbsp;|&nbsp;
+                        <span (click)="deleteBill(itemLists.Sr_No)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                            </svg>
+                        </span>
+                    </span>
+                    <ng-template #elseBlock>
+                        <span (click)="editBtn()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-emoji-laughing-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M7 6.5c0 .501-.164.396-.415.235C6.42 6.629 6.218 6.5 6 6.5s-.42.13-.585.235C5.164 6.896 5 7 5 6.5 5 5.672 5.448 5 6 5s1 .672 1 1.5m5.331 3a1 1 0 0 1 0 1A5 5 0 0 1 8 13a5 5 0 0 1-4.33-2.5A1 1 0 0 1 4.535 9h6.93a1 1 0 0 1 .866.5m-1.746-2.765C10.42 6.629 10.218 6.5 10 6.5s-.42.13-.585.235C9.164 6.896 9 7 9 6.5c0-.828.448-1.5 1-1.5s1 .672 1 1.5c0 .501-.164.396-.415.235" />
+                            </svg>
+                        </span>
+                    </ng-template>
+                </span>
+            </h6>
+        </div>
+    </div>
+</div>
+<br />

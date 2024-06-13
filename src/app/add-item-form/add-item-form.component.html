@@ -1,0 +1,209 @@
+<br />
+<div class="container">
+    <div hidden="" class="popUp" id="popUp">
+        <app-loader></app-loader>
+    </div>
+    <form class="" #itemForm="ngForm" (ngSubmit)="onSubmit(itemForm)">
+        <div class="row g-3 customBorder1">
+            <input type="hidden" name="srNo" #srNo="ngModel" [(ngModel)]="itemService.selectedItem.srNo">
+            <div class="col-md-6">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" name="name" #name="ngModel"
+                    [(ngModel)]="itemService.selectedItem.name" placeholder="Enter Name">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Mobile</label>
+                <input type="text" class="form-control" name="mob" #mob="ngModel"
+                    [(ngModel)]="itemService.selectedItem.mob" placeholder="Enter your Number">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-control" name="add" #add="ngModel"
+                    [(ngModel)]="itemService.selectedItem.add" placeholder="Enter your Address">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input type="text" class="form-control" name="city" #city="ngModel"
+                    [(ngModel)]="itemService.selectedItem.city" placeholder="Enter your City">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">State</label>
+                <input type="text" class="form-control" name="state" #state="ngModel"
+                    [(ngModel)]="itemService.selectedItem.state" placeholder="Enter your State">
+            </div>
+            <div class="col">
+                <label class="form-label">Bill No.</label>
+                <input type="text" class="form-control" name="billNo" #billNo="ngModel"
+                    [(ngModel)]="itemService.selectedItem.billNo" placeholder="Enter Bill Number">
+            </div>
+            <!-- <div class="col-md-4">
+                    <label class="form-label">Gst No.</label>
+                    <input type="text" class="form-control" placeholder="Enter Gst No.">
+                </div> -->
+            <div class="col">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control" name="billDate" #billDate="ngModel"
+                    [(ngModel)]="itemService.selectedItem.billDate" placeholder="Enter Bill Date">
+            </div>
+            <hr />
+            <div class="row g-2 customBorder2">
+                <div class="col">
+                    <h5>Items Details : </h5>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label">Item type</label>
+                                <select class="form-select" name="itemType" #itemDetails.itemType="ngModel"
+                                    [(ngModel)]="itemDetailsLocal.itemType">
+                                    <option value="Gold">Gold</option>
+                                    <option value="Silver">Silver</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Item Discription</label>
+                                <input type="text" class="form-control" name="itemDis" #itemDetails.itemDis="ngModel"
+                                    [(ngModel)]="itemDetailsLocal.itemDis" placeholder="Item discription">
+                            </div>
+                        </div>
+                    </div><br />
+                    <div class="col">
+                        <label class="form-label">Today's Market Rate (per 10 gm)</label>
+                        <input type="number" class="form-control" name="dayRate" #itemDetails.dayRate="ngModel"
+                            [(ngModel)]="itemDetailsLocal.dayRate" (input)="makingCalc()" placeholder="Today's Market Rate">
+                    </div><br />
+                    <div class="col">
+                        <label class="form-label">Weight (in gm)</label>
+                        <input type="number" class="form-control" name="weight" #itemDetails.weight="ngModel"
+                            [(ngModel)]="itemDetailsLocal.weight" (input)="makingCalc()" placeholder="Weight eg:10gm">
+                    </div><br />
+                    <div class="col">
+                        <label class="form-label">Carat</label>
+                        <input type="number" class="form-control" name="purity" #itemDetails.purity="ngModel"
+                            [(ngModel)]="itemDetailsLocal.purity" placeholder="Purity Percentage">
+                    </div><br />
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label">Making Charges %</label>
+                                <select id="makingPer" (input)="makingCalc()" class="form-select" name="makingPer"
+                                    #itemDetails.makingPer="ngModel" [(ngModel)]="itemDetailsLocal.makingPer">
+                                    <option *ngFor="let i of makingCharge;" [value]="i">{{ i }}%</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Making Charges</label>
+                                <input readonly type="number" class="form-control" name="making"
+                                    #itemDetails.making="ngModel" [(ngModel)]="itemDetailsLocal.making"
+                                    placeholder="Making Charges">
+                            </div>
+                        </div>
+                    </div><br />
+                    <div class="row g-4">&nbsp;&nbsp;&nbsp;
+                        <div class="col form-check form-check-inline">
+                            <label class="form-check-label" for="inlineCheckbox1">GST(Yes/No)</label>
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"
+                                name="gstApplied" #gstApplied="ngModel"
+                                [(ngModel)]="itemService.selectedItem.gstApplied" (click)="this.onGSTcheck()">
+                        </div>
+                        <div class="input-field col">
+                            <button class="btn btn-primary right" type="button"
+                                (click)="addItemDetails(itemDetailsLocal)">Add Item</button>
+                        </div>
+                        <div class="col">
+                            <h6 style="font-size: 15px;">Calculated Amt: {{this.itemService.selectedItem.calcAmt}} Rs
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="form-label">
+                                Return<br/>
+                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"
+                                    name="exchange" #exchange="ngModel"
+                                    [(ngModel)]="itemService.selectedItem.exchange" (click)="this.onExchangeCheck()">
+                            </label>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Exchange</label>
+                            <input class="form-control" type="number" name="exchangeAmt" #exchangeAmt="ngModel"
+                                [(ngModel)]="itemService.selectedItem.exchangeAmt" placeholder="Exchange Amount"
+                                [disabled]="this.exchangeDisable">
+                        </div>
+                        <div class="col-md-4" *ngIf="this.itemService.selectedItem.exchange">
+                            <label class="form-label"></label>
+                            <h6 style="font-size: 15px;">Amount after exchange: {{this.itemService.selectedItem.calcAmt - this.itemService.selectedItem.exchangeAmt}} Rs
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col customBorder3 bg-light">
+                    <table class="table table-bordered tableScroll">
+                        <thead>
+                            <tr>
+                                <th>Item Type</th>
+                                <th>Item Discription</th>
+                                <th>Day Rate (Rs)</th>
+                                <th>Weight</th>
+                                <th>Carat</th>
+                                <th>Making</th>
+                                <th>Price (Rs)</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of itemService.selectedItem.itemDetails; index as i;">
+                                <td>{{item.itemType}}</td>
+                                <td>{{item.itemDis}}</td>
+                                <td>{{item.dayRate}}</td>
+                                <td>{{item.weight}}</td>
+                                <td>{{item.purity}}</td>
+                                <td>{{item.making}}</td>
+                                <td>{{item.Price}}</td>
+                                <td>
+                                    <!-- <a (click)="onEditItemDetails(x)">
+                                <button class="btn btn-info"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                        height="16" fill="currentColor" class="bi bi-pencil-square"
+                                        viewBox="0 0 16 16">
+                                        <path
+                                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd"
+                                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                    </svg></button>&nbsp;
+                            </a> -->
+                                    <button class="btn btn-danger" (click)="onDeleteItemDetail(item,i)"><svg
+                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path
+                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                            <path
+                                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                        </svg></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Amount</label>
+                    <input class="form-control" type="number" name="amt" #amt="ngModel"
+                        [(ngModel)]="itemService.selectedItem.amt" placeholder="Total amount">
+                </div>
+                <div class="col">
+                    <label class="form-label">Paid Amount</label>
+                    <input class="form-control" type="number" name="paid" #paid="ngModel"
+                        [(ngModel)]="itemService.selectedItem.paid" placeholder="Paid amount">
+                </div>
+                <div>
+                    <label class="form-label">Remark</label>
+                    <input class="form-control" type="text" name="remark" #remark="ngModel"
+                        [(ngModel)]="itemService.selectedItem.remark" placeholder="Add Remark">
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit" [disabled]="this.submitDisable">Add</button>
+        </div>
+    </form>
+</div>
+<hr />
